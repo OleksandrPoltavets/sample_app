@@ -9,23 +9,32 @@ class UsersController < ApplicationController
   end	
 
   def new
-  	@user = User.new
+    unless signed_not_admin?
+      @user = User.new
+    else
+      flash[:alert] = "Already signed in."
+      redirect_to(root_path)
+    end
   end
 
   def index
     @users = User.paginate(page: params[:page])
   end
 
-	def create
-    @user = User.new(params[:user])
-    if @user.save
-      sign_in @user
-    	flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+  def create
+    unless signed_not_admin?
+      @user = User.new(params[:user])
+      if @user.save
+        sign_in @user
+        flash[:success] = "Welcome to the Sample App!"
+        redirect_to @user
+      else
+        render 'new'
+      end
     else
-      render 'new'
+      admin_user
     end
-  end
+  end    
 
   def edit
     @user = User.find(params[:id])
@@ -43,8 +52,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    user = User.find(params[:id])
+    unless current_user?(user)
+      user.destroy
+      flash[:success] = "User \"#{user.name}\" removed."
+    else
+      flash[:error] = "Cannot delete own account!"
+    end
     redirect_to users_url
   end
 
@@ -64,5 +78,9 @@ class UsersController < ApplicationController
 
     def admin_user
       redirect_to(root_path) unless current_user.admin?
+    end
+
+    def signed_not_admin?
+      signed_in? && !(current_user.admin?)
     end
 end
