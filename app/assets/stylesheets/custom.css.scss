@@ -217,3 +217,11 @@ aside {
     margin-bottom: 5px;
   }
 }
+
+/* Micropost character countdown */
+
+.countdown {
+  display: inline;
+  color: $grayLight;
+  float: right;
+}
