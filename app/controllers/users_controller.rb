@@ -8,6 +8,15 @@ class UsersController < ApplicationController
   def show
   	@user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+
+    # for testing purposes only (learning from RailsForZombies)
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml { render :xml => @user.microposts }
+      format.json { render :json => @user.microposts.to_json }
+      #format.json { render :json => @user.microposts.to_json_batch }
+    end  
+    # end of test section
   end	
 
   def new

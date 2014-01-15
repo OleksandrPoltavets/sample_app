@@ -7,6 +7,7 @@ gem 'faker', '1.0.1'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'jquery-rails', '2.0.2'
+#gem 'to_json_batch', :git => 'git://github.com/SanchoCK/to_json_batch.git'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
@@ -18,6 +19,7 @@ end
 
 group :development do
   gem 'annotate', '2.5.0'
+  #gem 'to_json_batch', :git => 'git://github.com/SanchoCK/to_json_batch.git'
 end
 
 # Gems used only for assets and not required
